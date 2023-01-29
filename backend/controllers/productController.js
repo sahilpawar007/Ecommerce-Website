@@ -3,7 +3,7 @@ const Product = require("../models/productModel")
 
 
 
-// Create Product
+// Create Product -- ADMIN
 
 exports.createProduct = async (req,res,next)=>{
 
@@ -14,8 +14,79 @@ exports.createProduct = async (req,res,next)=>{
     })
 }
 
-exports.getAllProducts = (req,res) =>{
+// Get All Product
+exports.getAllProducts = async(req,res) =>{
 
-    res.status(200).json({message:"Route is working fine"})
+    const products = await Product.find();
+    res.status(200).json({
+        sucess:true,
+        products
+    })
 
 }
+
+// Get Product Details
+
+exports.getProductDetails = async(req,res)=>{
+
+    const product = await Product.findById(req.params.id);
+
+    if(!product){
+        return res.status(500).json({
+            sucess:false,
+            message:"Product not found"
+        })
+    }
+
+    res.status(200).json({
+        sucess:true,
+        product
+    })
+}
+
+
+// Update Product --ADMIN
+
+exports.updateProduct = async(req,res,next) =>{
+
+    let product = await Product.findById(req.params.id);
+
+    if(!product){
+        return res.status(500).json({
+            sucess:false,
+            message:"Product not found"
+        })
+    }
+
+    product = await Product.findByIdAndUpdate(req.params.id,req.body,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false
+    })
+    
+    res.status(200).json({
+        sucess:true,
+        product
+    })
+}
+
+// Delete Product --ADMIN
+
+exports.deleteProduct = async(req,res,next)=>{
+    const product = await Product.findById(req.params.id);
+
+    if(!product){
+        return res.status(500).json({
+            sucess:false,
+            message:"Product not found"
+        })
+    }
+
+    await product.remove();
+
+    res.status(200).json({
+        sucess:true,
+        message:"Product Delete Successfully"
+    })
+}
+
