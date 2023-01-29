@@ -6,6 +6,6 @@ module.exports = (err,req,res,next)=>{
 
     res.status(err.statusCode).json({
         sucess:false,
-        error:err,
+        error:err.message,
     })
 };
