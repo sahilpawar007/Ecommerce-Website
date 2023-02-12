@@ -88,7 +88,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   if (!order) {
     return next(new ErrorHandler("Order not found with this Id", 404));
   }
-  
+
   if (order.orderStatus === "Delivered") {
     return next(new ErrorHandler("You have already delivered this order", 400));
   }
@@ -109,7 +109,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-  });
+  }); 
 
   async function updateStock(id, quantity) {
     const product = await Product.findById(id);
